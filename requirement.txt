@@ -1,0 +1,25 @@
+# Core Deep Learning
+torch
+torchvision
+torchaudio
+
+# Computer Vision & Face Detection
+opencv-python
+facenet-pytorch
+mediapipe
+Pillow
+
+# Data Augmentation (Winning Strategy ke liye)
+albumentations
+
+# Utils & UI
+numpy
+tqdm
+scikit-learn
+matplotlib
+pandas
+
+# Extension Backend (Future use ke liye)
+fastapi
+uvicorn
+python-multipart
