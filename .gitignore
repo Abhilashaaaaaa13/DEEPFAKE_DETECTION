@@ -1,0 +1,34 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.venv/
+venv/
+ENV/
+
+# Datasets (IMPORTANT: Dataset kabhi upload nahi karte)
+processed_data/
+DATASET/
+Celeb-DF-v2/
+FaceForensics/
+DFDC_preview/
+videos/
+crops/
+
+# Model Checkpoints
+*.pth
+*.pt
+*.h5
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+logs/
+*.log
