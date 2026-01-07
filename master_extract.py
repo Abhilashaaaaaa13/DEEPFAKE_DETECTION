@@ -3,15 +3,15 @@ import cv2
 import json
 import torch
 import numpy as np
-from tqdm import tqdm
+from tqdm import tqdm #progresss bar dikhane k liye
 from facenet_pytorch import MTCNN
 
-# ================= CONFIG =================
+# config
 OUTPUT_DIR = "processed_data"
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
 IMG_SIZE = 256
-MARGIN = 0.30
+MARGIN = 0.30   #face k around 30% extra area
 MAX_FRAMES_PER_VIDEO = 12
 
 TARGETS = {
@@ -22,31 +22,32 @@ TARGETS = {
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-mtcnn = MTCNN(keep_all=False, device=DEVICE)
+mtcnn = MTCNN(keep_all=False, device=DEVICE) #to keep 1 face(main face)
 
-# ================= UTILS =================
-def expand_bbox(bbox, width, height, margin):
-    x1, y1, x2, y2 = bbox
-    w, h = x2 - x1, y2 - y1
-    x1 = max(0, int(x1 - w * margin))
+
+def expand_bbox(bbox, width, height, margin):  #face box thoda bada krne k liyee
+    x1, y1, x2, y2 = bbox  #face k rectangle coordinates
+    w, h = x2 - x1, y2 - y1  #face ki width n height
+    x1 = max(0, int(x1 - w * margin))  #left side thoda expand , negative naa ho isley max ,0
     y1 = max(0, int(y1 - h * margin))
-    x2 = min(width, int(x2 + w * margin))
+    x2 = min(width, int(x2 + w * margin)) #rifht side exoand 
     y2 = min(height, int(y2 + h * margin))
     return x1, y1, x2, y2
 
 
-def extract_faces(video_path, label, prefix, target, current):
-    if current >= target:
+def extract_faces(video_path, label, prefix, target, current):  #video_path -> video ka adress, label ->real or fake , prefix ->image ka naam , target->kitni images chahiye ,current->abhi kitni ho chukii
+
+    if current >= target: #target completed
         return 0
 
-    cap = cv2.VideoCapture(video_path)
-    total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    cap = cv2.VideoCapture(video_path)  #video open
+    total = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))  #total frames count
     if total <= 0:
         return 0
 
     os.makedirs(os.path.join(OUTPUT_DIR, label), exist_ok=True)
 
-    frames = np.linspace(0, total - 1, MAX_FRAMES_PER_VIDEO, dtype=int)
+    frames = np.linspace(0, total - 1, MAX_FRAMES_PER_VIDEO, dtype=int) #unifrom sampling
     count = 0
 
     for idx in frames:
@@ -54,11 +55,11 @@ def extract_faces(video_path, label, prefix, target, current):
             break
 
         cap.set(cv2.CAP_PROP_POS_FRAMES, idx)
-        ret, frame = cap.read()
+        ret, frame = cap.read()  # ret mtlb  photo mili yaa nhiii , fram mtlb  "wo photo"  ,,, cap.read video ka next frame (photoo) read krtaa h
         if not ret:
             continue
 
-        boxes, _ = mtcnn.detect(frame)
+        boxes, _ = mtcnn.detect(frame) #face detect
         if boxes is None:
             continue
 
@@ -80,9 +81,9 @@ def extract_faces(video_path, label, prefix, target, current):
     return count
 
 
-# ================= DATASETS =================
+#dataset
 def run_celeb():
-    print("\n🔥 Processing CELEB-DF")
+    print("\n Processing CELEB-DF")
     counts = {"real": 0, "fake": 0}
 
     celeb_map = {
@@ -107,7 +108,7 @@ def run_celeb():
 
 
 def run_ff():
-    print("\n🔥 Processing FaceForensics++")
+    print("\n Processing FaceForensics++")
     counts = {"real": 0, "fake": 0}
     base = "DATASET/FaceForensics++_C23"
 
@@ -160,7 +161,7 @@ def run_ff():
 
 
 def run_dfdc():
-    print("\n🔥 Processing DFDC")
+    print("\n Processing DFDC")
     base = "DATASET/train_sample_videos"
 
     with open(os.path.join(base, "metadata.json")) as f:
@@ -186,7 +187,7 @@ def run_dfdc():
             break
 
 
-# ================= RUN =================
+# wrapped one
 if __name__ == "__main__":
     run_celeb()
     run_ff()
