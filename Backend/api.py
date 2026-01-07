@@ -13,7 +13,7 @@ MODEL_PATH = "best_deepfake_pro.pth"
 
 os.makedirs(TEMP_DIR, exist_ok=True)
 
-# --- Load model ONCE (very important) ---
+# --- Load model ONCE  ---
 try:
     model = get_model(MODEL_PATH)
 except Exception as e:
@@ -38,8 +38,8 @@ async def predict(file: UploadFile = File(...)):
         label, confidence = process_video(video_path, model)
 
         return {
-            "prediction": label,                     # 🔴 FAKE / 🟢 REAL / 🟡 UNCERTAIN
-            "confidence": round(confidence * 100, 2) # percentage
+            "prediction": label,                     
+            "confidence": round(confidence * 100, 2) 
         }
 
     except Exception as e:
