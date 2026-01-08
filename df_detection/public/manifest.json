@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Apex",
+  "version": "1.0",
+  "description": "Detect deepfakes for you.",
+  "action": {
+    "default_title": "Deepfake Detector",
+    "default_popup": "index.html"
+  },
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "icons": {
+    "32": "icon.png"
+  }
+}
