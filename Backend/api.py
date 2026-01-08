@@ -2,10 +2,19 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 import shutil
 import os
 import uuid
+from fastapi.middleware.cors import CORSMiddleware
 
 from video_inference import process_video, get_model
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],   # For development only
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # --- CONFIG ---
 TEMP_DIR = "temp"
@@ -22,7 +31,7 @@ except Exception as e:
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)):
     # ---- Basic validation ----
-    if not file.filename.endswith((".mp4", ".mov", ".mkv")):
+    if not file.filename.endswith((".mp4", ".mov", ".mkv",".webm")):
         raise HTTPException(status_code=400, detail="Unsupported video format")
 
     # Unique temp filename (important for parallel requests)

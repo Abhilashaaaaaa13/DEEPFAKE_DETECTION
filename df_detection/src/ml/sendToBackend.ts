@@ -1,29 +1,29 @@
-export async function sendToBackend(videoBlob: Blob) {
+type BackendResult = {
+  prediction: string;
+  confidence: number;
+};
+
+export async function sendToBackend(
+  videoBlob: Blob
+): Promise<BackendResult> {
   const formData = new FormData();
-  formData.append("video", videoBlob, "captured_clip.webm");
 
-  try {
-    const response = await fetch("http://localhost:8000/detect", {
-      method: "POST",
-      body: formData
-    });
+  // MUST match FastAPI parameter name
+  formData.append("file", videoBlob, "recorded_video.webm");
 
-    if (!response.ok) {
-      throw new Error("Backend error");
-    }
+  const response = await fetch("http://localhost:8000/predict", {
+    method: "POST",
+    body: formData
+  });
 
-    const result = await response.json();
-
-    console.log("🧠 Deepfake Result:", result);
-
-    chrome.notifications?.create({
-      type: "basic",
-      iconUrl: "icon.png",
-      title: "Deepfake Detection",
-      message: `Probability: ${result.probability}`
-    });
-
-  } catch (error) {
-    console.error("❌ Backend request failed", error);
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || "Backend request failed");
   }
+
+  const result: BackendResult = await response.json();
+
+  console.log("🧠 Deepfake Result:", result);
+
+  return result;
 }
