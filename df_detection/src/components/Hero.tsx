@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { sendToBackend } from "../ml/sendToBackend";
+import { MdArrowOutward } from "react-icons/md";
+
 
 type ResultType = {
   prediction: string;
@@ -13,6 +15,7 @@ const Hero = () => {
   const [recording, setRecording] = useState(false);
   const [analyzing, setAnalyzing] = useState(false);
   const [result, setResult] = useState<ResultType | null>(null);
+
 
   // 🎥 Capture video
   const handleAddVideo = async () => {
@@ -123,7 +126,7 @@ if (result) {
 
   // 🎬 NORMAL FLOW UI
   return (
-    <div className="w-full h-full mt-6 flex flex-col items-center gap-4 animate-slide-up">
+    <div className="w-full  mt-6 flex flex-col items-center gap-4 animate-slide-up">
 
       {/* Headings */}
       <div className="flex flex-col items-center">
@@ -140,13 +143,16 @@ if (result) {
         <button
           onClick={handleAddVideo}
           disabled={recording}
-          className={`px-6 py-2 font-semibold rounded-2xl text-white transition ${
+          className={`px-6 py-2 flex font-semibold rounded-[10px] text-[16px] text-white transition ${
             recording
               ? "bg-gray-500"
-              : "bg-red-500 hover:scale-105"
+              : "bg-blue-900 hover:scale-105"
           }`}
         >
           {recording ? "Recording..." : "Capture Video"}
+          <div className="rounded-full h-[20px] w-[20px] ml-[10px] mt-[4px] pl-[1px] pt-[1px] justify-center items-center bg-white text-blue-900">
+            <MdArrowOutward />
+          </div>
         </button>
       ) : (
         <button
@@ -170,9 +176,6 @@ if (result) {
 
       {videoUrl && (
         <div className="w-full mt-2">
-          <p className="text-white text-[18px] font-semibold mb-1">
-            Recorded Clip:
-          </p>
           <video
             src={videoUrl}
             controls
