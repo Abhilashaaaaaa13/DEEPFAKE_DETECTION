@@ -11,8 +11,8 @@ from albumentations.pytorch import ToTensorV2
 
 # --- CONFIGURATION ---
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-THRESHOLD_FAKE = 0.80     # Fake threshold
-THRESHOLD_REAL = 0.20     # Real threshold
+THRESHOLD_FAKE = 0.65     # Fake threshold
+THRESHOLD_REAL = 0.35     # Real threshold
 SMOOTHING_WINDOW = 5       # Temporal smoothing window
 
 # -1m model loader
