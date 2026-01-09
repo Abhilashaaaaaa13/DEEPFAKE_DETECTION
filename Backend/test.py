@@ -84,9 +84,9 @@ def process_video(video_path, model):
     # 3-Level Verdict (REAL / FAKE / UNCERTAIN)
     avg_fake_score = sum(frame_scores) / len(frame_scores)
 
-    if avg_fake_score >= 0.80:
+    if avg_fake_score >= 0.65:
         verdict = "🔴 FAKE"
-    elif avg_fake_score <= 0.20:
+    elif avg_fake_score <= 0.35:
         verdict = "🟢 REAL"
     else:
         verdict = "🟡 UNCERTAIN"

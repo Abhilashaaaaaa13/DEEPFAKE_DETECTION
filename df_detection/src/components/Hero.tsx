@@ -74,47 +74,52 @@ const Hero = () => {
   };
 
   // 🎯 RESULT VIEW 
-  if (result) {
-    const isFake = result.prediction.includes("FAKE");
+if (result) {
+  const isFake = result.prediction.includes("FAKE");
 
-    return (
-      <div className="w-full h-full flex flex-col items-center justify-center gap-4 animate-slide-up">
+  return (
+    <div className="w-full h-full flex flex-col items-center justify-center gap-6 overflow-hidden">
 
-        <h1
-          className={`text-3xl font-bold ${
-            isFake ? "text-red-500" : "text-emerald-400"
-          }`}
-        >
-          {result.prediction}
-        </h1>
+      {/* 🔴 FAKE / 🟢 REAL */}
+      <h1
+        className={`text-3xl font-bold opacity-0 animate-slide-up animation-delay-100 ${
+          isFake ? "text-red-500" : "text-emerald-400"
+        }`}
+      >
+        {result.prediction}
+      </h1>
 
-        <div className="w-full px-6">
-          <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
-            <div
-              className={`h-full ${
-                isFake ? "bg-red-500" : "bg-emerald-500"
-              }`}
-              style={{ width: `${result.confidence}%` }}
-            />
-          </div>
-          <p className="text-center text-white mt-2 font-semibold">
-            Confidence: {result.confidence}%
-          </p>
+      {/* 📊 Confidence */}
+      <div className="w-full px-6 opacity-0 animate-slide-up animation-delay-200">
+        <div className="w-full bg-gray-700 rounded-full h-3 overflow-hidden">
+          <div
+            className={`h-full ${
+              isFake ? "bg-red-500" : "bg-emerald-500"
+            }`}
+            style={{ width: `${result.confidence}%` }}
+          />
         </div>
-
-        <button
-          onClick={() => {
-            setResult(null);
-            setVideoUrl(null);
-            setVideoBlob(null);
-          }}
-          className="mt-4 px-6 py-2 rounded-2xl bg-gray-600 text-white hover:bg-gray-500 transition"
-        >
-          Analyze Another Video
-        </button>
+        <p className="text-center text-white mt-2 font-semibold">
+          Confidence: {result.confidence}%
+        </p>
       </div>
-    );
-  }
+
+      {/* 🔁 Button */}
+      <button
+        onClick={() => {
+          setResult(null);
+          setVideoUrl(null);
+          setVideoBlob(null);
+        }}
+        className="mt-4 px-6 py-2 rounded-2xl bg-gray-600 text-white hover:bg-gray-500 transition opacity-0 animate-slide-up animation-delay-300"
+      >
+        Analyze Another Video
+      </button>
+
+    </div>
+  );
+}
+
 
   // 🎬 NORMAL FLOW UI
   return (
@@ -165,7 +170,7 @@ const Hero = () => {
 
       {videoUrl && (
         <div className="w-full mt-2">
-          <p className="text-white font-semibold mb-1">
+          <p className="text-white text-[18px] font-semibold mb-1">
             Recorded Clip:
           </p>
           <video
